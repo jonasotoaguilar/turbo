@@ -29,8 +29,12 @@ jobs:
 
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.1
+        env:
+          PRE_COMMIT_COLOR: always
+          RUFF_OUTPUT_FORMAT: github
+          FORCE_COLOR: 1
         with:
-          extra_args: >
-            ${{ github.event_name == 'pull_request' 
-              && format('--from-ref {0} --to-ref {1}', github.event.pull_request.base.sha, github.event.pull_request.head.sha) 
+          extra_args: >-
+            ${{ github.event_name == 'pull_request'
+              && format('--from-ref {0} --to-ref {1}', github.event.pull_request.base.sha, github.event.pull_request.head.sha)
               || '--all-files' }}
