@@ -5,6 +5,7 @@
 #   - Gemini CLI: .gemini/skills/ symlink + GEMINI.md copies
 #   - Codex (OpenAI): .codex/skills/ symlink + AGENTS.md (native)
 #   - GitHub Copilot: .github/copilot-instructions.md copy
+#   - Antigravity: .agent/skills/ symlink + AGENTS.md (native)
 #
 # Usage:
 #   ./setup.sh              # Interactive mode (select AI assistants)
@@ -17,6 +18,13 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 SKILLS_SOURCE="$SCRIPT_DIR"
+
+# Check for required tools
+if ! command -v fd &> /dev/null; then
+    echo -e "${RED}Error: fd is not installed.${NC}"
+    echo -e "${YELLOW}Please install it: brew install fd${NC}"
+    exit 1
+fi
 
 # Colors for output
 RED='\033[0;31m'
@@ -32,6 +40,7 @@ SETUP_CLAUDE=false
 SETUP_GEMINI=false
 SETUP_CODEX=false
 SETUP_COPILOT=false
+SETUP_ANTIGRAVITY=false
 
 # =============================================================================
 # HELPER FUNCTIONS
@@ -48,6 +57,7 @@ show_help() {
     echo "  --gemini    Configure Gemini CLI"
     echo "  --codex     Configure Codex (OpenAI)"
     echo "  --copilot   Configure GitHub Copilot"
+    echo "  --antigravity Configure Antigravity"
     echo "  --help      Show this help message"
     echo ""
     echo "If no options provided, runs in interactive mode."
@@ -63,8 +73,8 @@ show_menu() {
     echo -e "${CYAN}(Use numbers to toggle, Enter to confirm)${NC}"
     echo ""
 
-    local options=("Claude Code" "Gemini CLI" "Codex (OpenAI)" "GitHub Copilot")
-    local selected=(true false false false)  # Claude selected by default
+    local options=("Claude Code" "Gemini CLI" "Codex (OpenAI)" "GitHub Copilot" "Antigravity")
+    local selected=(true false false false false)  # Only Claude selected by default
 
     while true; do
         for i in "${!options[@]}"; do
@@ -87,8 +97,9 @@ show_menu() {
             2) selected[1]=$([ "${selected[1]}" = true ] && echo false || echo true) ;;
             3) selected[2]=$([ "${selected[2]}" = true ] && echo false || echo true) ;;
             4) selected[3]=$([ "${selected[3]}" = true ] && echo false || echo true) ;;
-            a|A) selected=(true true true true) ;;
-            n|N) selected=(false false false false) ;;
+            5) selected[4]=$([ "${selected[4]}" = true ] && echo false || echo true) ;;
+            a|A) selected=(true true true true true) ;;
+            n|N) selected=(false false false false false) ;;
             "") break ;;
             *) echo -e "${RED}Invalid option${NC}" ;;
         esac
@@ -101,6 +112,7 @@ show_menu() {
     SETUP_GEMINI=${selected[1]}
     SETUP_CODEX=${selected[2]}
     SETUP_COPILOT=${selected[3]}
+    SETUP_ANTIGRAVITY=${selected[4]}
 }
 
 setup_claude() {
@@ -169,12 +181,36 @@ setup_copilot() {
     fi
 }
 
+setup_antigravity() {
+    local skills_target="$REPO_ROOT/.agent/skills"
+
+    if [ ! -d "$REPO_ROOT/.agent" ]; then
+        mkdir -p "$REPO_ROOT/.agent"
+    fi
+
+    # Remove legacy rules directory if it exists
+    if [ -d "$REPO_ROOT/.agent/rules" ]; then
+        rm -rf "$REPO_ROOT/.agent/rules"
+    fi
+
+    # Skills symlink
+    if [ -L "$skills_target" ]; then
+        rm "$skills_target"
+    elif [ -d "$skills_target" ]; then
+        mv "$skills_target" "$REPO_ROOT/.agent/skills.backup.$(date +%s)"
+    fi
+
+    ln -s "$SKILLS_SOURCE" "$skills_target"
+    echo -e "${GREEN}  ✓ .agent/skills -> skills/${NC}"
+    echo -e "${GREEN}  ✓ Antigravity uses AGENTS.md natively${NC}"
+}
+
 copy_agents_md() {
     local target_name="$1"
     local agents_files
     local count=0
 
-    agents_files=$(find "$REPO_ROOT" -name "AGENTS.md" -not -path "*/node_modules/*" -not -path "*/.git/*" 2>/dev/null)
+    agents_files=$(fd "AGENTS.md" "$REPO_ROOT" --exclude node_modules --exclude .git 2>/dev/null)
 
     for agents_file in $agents_files; do
         local agents_dir
@@ -215,6 +251,10 @@ while [[ $# -gt 0 ]]; do
             SETUP_COPILOT=true
             shift
             ;;
+        --antigravity)
+            SETUP_ANTIGRAVITY=true
+            shift
+            ;;
         --help|-h)
             show_help
             exit 0
@@ -247,13 +287,13 @@ echo -e "${BLUE}Found $SKILL_COUNT skills to configure${NC}"
 echo ""
 
 # Interactive mode if no flags provided
-if [ "$SETUP_CLAUDE" = false ] && [ "$SETUP_GEMINI" = false ] && [ "$SETUP_CODEX" = false ] && [ "$SETUP_COPILOT" = false ]; then
+if [ "$SETUP_CLAUDE" = false ] && [ "$SETUP_GEMINI" = false ] && [ "$SETUP_CODEX" = false ] && [ "$SETUP_COPILOT" = false ] && [ "$SETUP_ANTIGRAVITY" = false ]; then
     show_menu
     echo ""
 fi
 
 # Check if at least one selected
-if [ "$SETUP_CLAUDE" = false ] && [ "$SETUP_GEMINI" = false ] && [ "$SETUP_CODEX" = false ] && [ "$SETUP_COPILOT" = false ]; then
+if [ "$SETUP_CLAUDE" = false ] && [ "$SETUP_GEMINI" = false ] && [ "$SETUP_CODEX" = false ] && [ "$SETUP_COPILOT" = false ] && [ "$SETUP_ANTIGRAVITY" = false ]; then
     echo -e "${YELLOW}No AI assistants selected. Nothing to do.${NC}"
     exit 0
 fi
@@ -265,6 +305,7 @@ TOTAL=0
 [ "$SETUP_GEMINI" = true ] && TOTAL=$((TOTAL + 1))
 [ "$SETUP_CODEX" = true ] && TOTAL=$((TOTAL + 1))
 [ "$SETUP_COPILOT" = true ] && TOTAL=$((TOTAL + 1))
+[ "$SETUP_ANTIGRAVITY" = true ] && TOTAL=$((TOTAL + 1))
 
 if [ "$SETUP_CLAUDE" = true ]; then
     echo -e "${YELLOW}[$STEP/$TOTAL] Setting up Claude Code...${NC}"
@@ -289,6 +330,11 @@ if [ "$SETUP_COPILOT" = true ]; then
     setup_copilot
 fi
 
+if [ "$SETUP_ANTIGRAVITY" = true ]; then
+    echo -e "${YELLOW}[$STEP/$TOTAL] Setting up Antigravity...${NC}"
+    setup_antigravity
+fi
+
 # =============================================================================
 # SUMMARY
 # =============================================================================
@@ -300,6 +346,7 @@ echo "Configured:"
 [ "$SETUP_CODEX" = true ] && echo "  • Codex (OpenAI): .codex/skills/ + AGENTS.md (native)"
 [ "$SETUP_GEMINI" = true ] && echo "  • Gemini CLI:     .gemini/skills/ + GEMINI.md"
 [ "$SETUP_COPILOT" = true ] && echo "  • GitHub Copilot: .github/copilot-instructions.md"
+[ "$SETUP_ANTIGRAVITY" = true ] && echo "  • Antigravity:    .agent/skills/ + AGENTS.md (native)"
 echo ""
 echo -e "${BLUE}Note: Restart your AI assistant to load the skills.${NC}"
 echo -e "${BLUE}      AGENTS.md is the source of truth - edit it, then re-run this script.${NC}"
