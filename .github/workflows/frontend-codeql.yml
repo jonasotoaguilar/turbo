@@ -10,8 +10,8 @@ on:
     paths:
       - "frontend/**"
   workflow_dispatch:
-  schedule:
-    - cron: "30 1 * * 5"
+  # schedule:
+  #   - cron: "30 1 * * 5"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
