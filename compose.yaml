@@ -19,6 +19,7 @@ services:
     command: bash -c "uv sync && uv run -- python manage.py migrate && uv run -- python manage.py runserver 0.0.0.0:8000"
     build:
       context: backend
+      dockerfile: Dockerfile.dev
     expose:
       - "8000"
     ports:
@@ -34,6 +35,7 @@ services:
     command: bash -c "pnpm install -r && pnpm --filter web dev"
     build:
       context: frontend
+      dockerfile: Dockerfile.dev
     volumes:
       - ./frontend:/app
     expose:
@@ -42,5 +44,7 @@ services:
       - "3000:3000"
     env_file:
       - .env.frontend
+    environment:
+      - CI=true
     depends_on:
       - api
