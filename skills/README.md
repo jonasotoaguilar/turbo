@@ -29,7 +29,7 @@ This creates symlinks so each tool finds skills in its expected location:
 | Codex (OpenAI)         | `.codex/skills/`  |
 | GitHub Copilot         | `.github/skills/` |
 | Gemini CLI             | `.gemini/skills/` |
-| Antigravity            | `.agent/skills/`   |
+| Antigravity            | `.agent/skills/`  |
 
 After running setup, restart your AI coding assistant to load the skills.
 
@@ -47,9 +47,8 @@ Read skills/{skill-name}/SKILL.md
 
 Reusable patterns for common technologies:
 
-| Skill        | Description                                 |
-| ------------ | ------------------------------------------- |
-
+| Skill | Description |
+| ----- | ----------- |
 
 ### Specific Skills
 
