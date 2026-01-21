@@ -1,0 +1,66 @@
+# Production Docker Compose configuration
+# Uses locally built images with production optimizations
+#
+# For development with hot-reload, use docker-compose-dev.yml instead:
+#   docker compose -f docker-compose-dev.yml up
+#
+services:
+  api:
+    hostname: "api"
+    image: ${DOCKER_REGISTRY:-ghcr.io}/${DOCKER_NAMESPACE:-jonasotoaguilar}/api:${API_VERSION:-latest}
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: prod
+    env_file:
+      - path: .env
+        required: false
+    ports:
+      - "${DJANGO_PORT:-8080}:8000"
+    volumes:
+      - ./_data/api:/app/.config/api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["prod"]
+    restart: unless-stopped
+
+  ui:
+    image: ${DOCKER_REGISTRY:-ghcr.io}/${DOCKER_NAMESPACE:-jonasotoaguilar}/ui:${UI_VERSION:-latest}
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: prod
+    env_file:
+      - path: .env
+        required: false
+    ports:
+      - "${UI_PORT:-3000}:3000"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16.3-alpine3.20
+    hostname: "postgres-db"
+    volumes:
+      - ./_data/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_ADMIN_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_ADMIN_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    env_file:
+      - path: .env
+        required: false
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "sh -c 'pg_isready -U ${POSTGRES_ADMIN_USER} -d ${POSTGRES_DB}'",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped

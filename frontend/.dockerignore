@@ -1,10 +1,22 @@
+# Include any files or directories that you don't want to be copied to your
+# container here (e.g., local build artifacts, temporary files, etc.)
+
+Dockerfile*
+.dockerignore
+node_modules
+npm-debug.log
+*.log
+README.md
+.next
+!.next/static
+!.next/standalone
 .git
 .gitignore
-node_modules
-.next
-dist
-Dockerfile*
 .env*
+!.env.template
+dist
+coverage
+.turbo
 .terraform
 .vscode
 out
