@@ -6,8 +6,6 @@ updates:
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 5
-    commit-message:
-      prefix: "ci"
 
   # Maintain Docker dependencies
   # Maintain Backend Docker dependencies
@@ -16,8 +14,6 @@ updates:
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 5
-    commit-message:
-      prefix: "chore"
 
   # Maintain Frontend Docker dependencies
   - package-ecosystem: "docker"
@@ -25,8 +21,6 @@ updates:
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 5
-    commit-message:
-      prefix: "chore"
 
   # Maintain Backend dependencies (Python/uv)
   - package-ecosystem: "pip"
@@ -34,9 +28,6 @@ updates:
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 5
-    commit-message:
-      prefix: "chore"
-      include: "scope"
 
   # Maintain Frontend dependencies (pnpm)
   - package-ecosystem: "npm"
@@ -44,6 +35,3 @@ updates:
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 5
-    commit-message:
-      prefix: "chore"
-      include: "scope"
