@@ -20,7 +20,7 @@ FROM python:3.13-slim-bookworm AS dev
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-ENV UV_PROJECT_ENVIRONMENT=/.venv
+ENV UV_PROJECT_ENVIRONMENT=/app/.venv
 
 WORKDIR /app
 
@@ -31,7 +31,8 @@ RUN addgroup --system django && \
     adduser --system --ingroup django --home /home/django django
 
 COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-install-project
+RUN uv sync --no-install-project && \
+    chown -R django:django /app
 
 # Copy entrypoint script and set permissions
 # Copy entrypoint script and set permissions

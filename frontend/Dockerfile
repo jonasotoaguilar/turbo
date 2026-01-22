@@ -17,7 +17,7 @@ WORKDIR /app
 COPY . .
 
 # Install all dependencies
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM base AS builder

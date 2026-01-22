@@ -26,6 +26,7 @@ services:
     restart: unless-stopped
 
   ui:
+    hostname: "ui"
     image: ${DOCKER_REGISTRY:-ghcr.io}/${DOCKER_NAMESPACE:-jonasotoaguilar}/ui:${UI_VERSION:-latest}
     build:
       context: ./frontend
@@ -41,8 +42,8 @@ services:
     restart: unless-stopped
 
   postgres:
-    image: postgres:16.3-alpine3.20
     hostname: "postgres-db"
+    image: postgres:16.3-alpine3.20
     volumes:
       - ./_data/postgres:/var/lib/postgresql/data
     environment:
