@@ -15,20 +15,20 @@
 
 When performing these actions, ALWAYS invoke the corresponding skill FIRST:
 
-| Action | Skill |
-|--------|-------|
-| Adding css support | `css` |
-| Adding html-5 support | `html-5` |
-| Adding react support | `react-19` |
-| Adding react support | `react-stack-libs` |
-| Adding shadcn-ui support | `shadcn-ui` |
-| Adding sonner support | `sonner` |
-| Adding tailwind support | `tailwind-4` |
-| Adding typescript support | `typescript` |
-| Adding vitest support | `vitest` |
-| Adding zod support | `zod-4` |
-| Adding zustand support | `zustand-5` |
-| App Router / Server Actions | `nextjs-16` |
+| Action                      | Skill              |
+| --------------------------- | ------------------ |
+| Adding css support          | `css`              |
+| Adding html-5 support       | `html-5`           |
+| Adding react support        | `react-19`         |
+| Adding react support        | `react-stack-libs` |
+| Adding shadcn-ui support    | `shadcn-ui`        |
+| Adding sonner support       | `sonner`           |
+| Adding tailwind support     | `tailwind-4`       |
+| Adding typescript support   | `typescript`       |
+| Adding vitest support       | `vitest`           |
+| Adding zod support          | `zod-4`            |
+| Adding zustand support      | `zustand-5`        |
+| App Router / Server Actions | `nextjs-16`        |
 
 ---
 
@@ -39,6 +39,7 @@ When performing these actions, ALWAYS invoke the corresponding skill FIRST:
 - ALWAYS: Use functional components and hooks.
 - ALWAYS: Await Dynamic APIs in Next.js 16 (`params`, `searchParams`, `cookies()`, etc.).
 - ALWAYS: Use `next/form` for native form enhancement.
+- ALWAYS: Verify implementation by running the validation script (`pnpm run validate`) which includes linting and building.
 - NEVER: Use `useMemo` or `useCallback` (React Compiler handles this).
 - NEVER: Use `var()` or hex colors in classNames.
 
@@ -110,6 +111,7 @@ pnpm run openapi:generate
 
 - [ ] `pnpm run typecheck` passes
 - [ ] `pnpm run lint` passes (Biome)
+- [ ] `pnpm run build` (or `pnpm run validate`) passes without errors
 - [ ] Next.js 16 Async APIs are correctly awaited
 - [ ] Responsive design verified (mobile/desktop)
 - [ ] Dark mode compatibility checked

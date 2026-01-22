@@ -11,13 +11,13 @@
 
 When performing these actions, ALWAYS invoke the corresponding skill FIRST:
 
-| Action | Skill |
-|--------|-------|
-| Adding ai-sdk-5 support | `ai-sdk-5` |
-| Adding django-drf support | `django-drf` |
-| Adding pytest support | `pytest` |
-| Adding python support | `python-stack-libs` |
-| Optimizing Python performance | `pyo3-rust` |
+| Action                        | Skill               |
+| ----------------------------- | ------------------- |
+| Adding ai-sdk-5 support       | `ai-sdk-5`          |
+| Adding django-drf support     | `django-drf`        |
+| Adding pytest support         | `pytest`            |
+| Adding python support         | `python-stack-libs` |
+| Optimizing Python performance | `pyo3-rust`         |
 
 ---
 
@@ -28,6 +28,7 @@ When performing these actions, ALWAYS invoke the corresponding skill FIRST:
 - ALWAYS: Use `uv` for dependency management (`uv add`, `uv run`).
 - ALWAYS: Use type hints for all function signatures.
 - ALWAYS: Use `drf-spectacular` for API documentation.
+- ALWAYS: Verify implementation by running tests (`uv run pytest`).
 - NEVER: Use `pip` directly.
 - NEVER: Commit secrets or `.env` files.
 
@@ -80,6 +81,7 @@ uv add <package>
 
 - [ ] `uv run ruff check .` passes
 - [ ] `uv run pytest` passes
+- [ ] Django checks pass (`uv run python manage.py check`)
 - [ ] Type hints are complete and correct
 - [ ] API schema is updated (if endpoints changed)
 - [ ] Migrations are created and tested

@@ -36,30 +36,30 @@ Use these skills for detailed patterns on-demand:
 
 When performing these actions, ALWAYS invoke the corresponding skill FIRST:
 
-| Action | Skill |
-|--------|-------|
-| -- | `skill-sync` |
-| Adding ai-sdk-5 support | `ai-sdk-5` |
-| Adding css support | `css` |
-| Adding django-drf support | `django-drf` |
-| Adding html-5 support | `html-5` |
-| Adding pytest support | `pytest` |
-| Adding python support | `python-stack-libs` |
-| Adding react support | `react-19` |
-| Adding react support | `react-stack-libs` |
-| Adding shadcn-ui support | `shadcn-ui` |
-| Adding sonner support | `sonner` |
-| Adding tailwind support | `tailwind-4` |
-| Adding typescript support | `typescript` |
-| Adding vitest support | `vitest` |
-| Adding zod support | `zod-4` |
-| Adding zustand support | `zustand-5` |
-| After creating/modifying a skill | `skill-sync` |
-| App Router / Server Actions | `nextjs-16` |
-| Creating new skills | `skill-creator` |
-| Optimizing Python performance | `pyo3-rust` |
-| Regenerate AGENTS.md Auto-invoke tables (sync.sh) | `skill-sync` |
-| Troubleshoot why a skill is missing from AGENTS.md auto-invoke | `skill-sync` |
+| Action                                                         | Skill               |
+| -------------------------------------------------------------- | ------------------- |
+| --                                                             | `skill-sync`        |
+| Adding ai-sdk-5 support                                        | `ai-sdk-5`          |
+| Adding css support                                             | `css`               |
+| Adding django-drf support                                      | `django-drf`        |
+| Adding html-5 support                                          | `html-5`            |
+| Adding pytest support                                          | `pytest`            |
+| Adding python support                                          | `python-stack-libs` |
+| Adding react support                                           | `react-19`          |
+| Adding react support                                           | `react-stack-libs`  |
+| Adding shadcn-ui support                                       | `shadcn-ui`         |
+| Adding sonner support                                          | `sonner`            |
+| Adding tailwind support                                        | `tailwind-4`        |
+| Adding typescript support                                      | `typescript`        |
+| Adding vitest support                                          | `vitest`            |
+| Adding zod support                                             | `zod-4`             |
+| Adding zustand support                                         | `zustand-5`         |
+| After creating/modifying a skill                               | `skill-sync`        |
+| App Router / Server Actions                                    | `nextjs-16`         |
+| Creating new skills                                            | `skill-creator`     |
+| Optimizing Python performance                                  | `pyo3-rust`         |
+| Regenerate AGENTS.md Auto-invoke tables (sync.sh)              | `skill-sync`        |
+| Troubleshoot why a skill is missing from AGENTS.md auto-invoke | `skill-sync`        |
 
 ---
 
@@ -99,3 +99,15 @@ Follow conventional-commit style: `<type>[scope]: <description>`
 **Types:** `feat`, `fix`, `docs`, `chore`, `perf`, `refactor`, `style`, `test`
 
 Example: `feat(api): add auth endpoint`
+
+---
+
+## Verification Policy
+
+AI Agents **MUST** verify their implementation before reporting completion. This includes:
+
+1. **Linting**: Ensure code follows established standards.
+2. **Testing**: Run relevant tests and ensure they pass.
+3. **Building**: Run the build process to catch compilation/bundling errors.
+
+**DO NOT** ask the user to run builds or tests for you. It is **YOUR** responsibility to ensure the implementation is correct and functional.
