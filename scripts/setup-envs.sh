@@ -10,22 +10,14 @@ YELLOW='\033[1;33m'
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$PROJECT_ROOT" || exit 1
 
-echo -e "${YELLOW}Configurando archivos .env...${NC}"
+echo -e "${YELLOW}Configurando archivo .env...${NC}"
 
-# Backend env
-if [ ! -f .env.backend ]; then
-    echo -e "Creando .env.backend desde template..."
-    cp .env.backend.template .env.backend
+# Root env
+if [ ! -f .env ]; then
+    echo -e "Creando .env desde template..."
+    cp .env.template .env
 else
-    echo -e ".env.backend ya existe, omitiendo."
+    echo -e ".env ya existe, omitiendo."
 fi
 
-# Frontend env
-if [ ! -f .env.frontend ]; then
-    echo -e "Creando .env.frontend desde template..."
-    cp .env.frontend.template .env.frontend
-else
-    echo -e ".env.frontend ya existe, omitiendo."
-fi
-
-echo -e "${GREEN}✅ Archivos .env configurados.${NC}"
+echo -e "${GREEN}✅ Archivo .env configurado.${NC}"
