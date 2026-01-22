@@ -52,7 +52,7 @@ The easiest way to get the environment ready (both local and Docker) is using ou
 This script will:
 
 - Verify prerequisites (`pnpm`, `uv`).
-- Setup `.env` files from templates.
+- Setup .env file from template.
 - Install local dependencies for IDE support.
 - Configure **pre-commit** hooks.
 - Build the **Docker** containers.
@@ -124,7 +124,7 @@ We maintain several scripts to streamline development:
 - `setup.sh`: Full environment initialization.
 - `lint.sh`: Runs linting on both Frontend (Biome) and Backend (Ruff).
 - `install-pre-commit.sh`: Configures Git hooks for clean commits.
-- `setup-envs.sh`: Initializes `.env` files.
+- `setup-envs.sh`: Initializes the `.env` file.
 
 ---
 
