@@ -1,1 +1,5 @@
-module.exports = require('@frontend/ui/postcss.config')
+module.exports = {
+  plugins: {
+    '@tailwindcss/postcss': {}
+  }
+}
